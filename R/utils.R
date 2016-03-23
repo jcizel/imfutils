@@ -48,12 +48,26 @@ imfDate2month <- function(x){
 
 ##' @export
 imfDate2date <- function(x){
-    sprintf(
-        fmt = "%s-%s-1",
-        x %>>% imfDate2year,
-        x %>>% imfDate2month
+    require(lubridate)
+    t = x %>>% unique
+    
+    data.table(
+        t = t,
+        date = sprintf(
+            fmt = "%s-%s-1",
+            t %>>% imfDate2year,
+            t %>>% imfDate2month
+        ) %>>%
+            as.Date %>>%
+            (. + months(1) - 1)
     ) %>>%
-        as.Date
+        setkey(t) ->
+        lookup
+    
+    lookup[x][[2L]] ->
+        out
+
+    return(out)
 }
 
 ##' @export
@@ -66,5 +80,30 @@ period2months <- function(period)
     y[grepl('Q',x)] <- substr(x[grepl('Q',x)],2,4) %>>% as.numeric %>>% (. * 3)
 
     return(y)
+}
 
+
+.periodicity <- function(x)
+{
+    y <- rep("A", times = length(x))   
+    y[grepl('M',x)] <- 'M'
+    y[grepl('Q',x)] <- 'Q'
+    return(y)
+}
+
+##' @export 
+imfDate2periodicity <- function(x){
+    t = x %>>% unique
+    
+    data.table(
+        t = t,
+        per = t %>>% .periodicity
+    ) %>>%
+        setkey(t) ->
+        lookup
+    
+    lookup[x][[2L]] ->
+        out
+
+    return(out)
 }
