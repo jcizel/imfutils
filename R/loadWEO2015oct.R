@@ -34,15 +34,23 @@ loadWEO2015oct <- function(){
         ) ->
         data
 
+    ## data %>>%
+    ##     subset(concept_id == 'NGDPD') %>>%
+    ##     subset(imfctry == 111)
+
     data %>>%
         mutate(
-            value = value %>>% as.numeric,
+            value = value %>>% gsub(pattern = ",", replacement = "") %>>% as.numeric,
             date = sprintf('%s-%s-%s',
                            variable,
                            12,
                            31) %>>% as.Date
         ) ->
         data2
+
+    ## data2 %>>%
+    ##     subset(concept_id == 'NGDPD') %>>%
+    ##     subset(imfctry == 111)    
 
     attr(data2,'lookup') <- lookup
     
