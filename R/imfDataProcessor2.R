@@ -15,6 +15,7 @@ ifssource2final <- function(){
 
     ## names(data) %>>% length
     ## names(data) %>>% unique %>>% length
+    ## data %>>% (V1165) %>>% table
     
     data %>>%
         mutate(
@@ -107,3 +108,12 @@ ifssource2final <- function(){
 
 
 ## save(ifs_final,file = '~/Downloads/ifs_final.RData')
+
+## ifs_long %>>%
+##     subset(concept_id %like% "^NGDP") %>>%
+##     subset(imfctry == '111') %>>% (concept_id) %>>% table
+
+## ifs_final %>>%
+##     subset(grepl(pattern = "^NGDP\\..*\\.?XDC",concept_id)) %>>%
+##     subset(imfctry == '122') %>>%
+##     data.frame
