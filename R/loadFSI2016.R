@@ -8,10 +8,10 @@ loadFSI2016 <- function(){
     
 }
 
-prepeareFSI <- function(){
+prepareFSI <- function(){
     FILE.TS <- system.file('./imffsi2016/FSI_03-25-2016 15-10-03-46_timeSeries.csv',
-                           package = 'imfutils')
 
+                           package = 'imfutils')
 
     FILE.TS %>>%
         read.csv(check.names = FALSE) %>>%
